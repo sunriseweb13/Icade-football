@@ -46,15 +46,11 @@ class AppController extends AbstractController
 
         $results = $this->search->search('fixtures', $q);
 
-        $data = [];
+        $results = array_filter($results, static function ($v, $k) use ($q) {
+            return $v['league']['round'] === $q['round'];
+        }, ARRAY_FILTER_USE_BOTH);
 
-        foreach ($results as $response) {
-            if ($q['round'] === $response['league']['round']) {
-                $data[] = $response;
-            }
-        }
-
-        usort($data, static function ($a, $b) {
+        usort($results, static function ($a, $b) {
             $t1 = $a['fixture']['timestamp'];
             $t2 = $b['fixture']['timestamp'];
 
@@ -62,8 +58,7 @@ class AppController extends AbstractController
         });
 
         return $this->render('app/index.html.twig', [
-            'controller_name' => 'AppController',
-            'results' => $data,
+            'results' => $results,
             'filter' => $filter
         ]);
     }
