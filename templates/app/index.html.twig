@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AppController!{% endblock %}
+
+{% block body %}
+
+    <div class="container container-md">
+
+        <h1 class="text-center my-4">Icade Football</h1>
+
+        <form action="{{ path('app_index') }}" method="get">
+            <div class="row">
+                <div class="col">
+                    <select name="league" id="league" class="form-select">
+                        {% for leagues in filter['leagues'] %}
+                            <option value="{{ leagues['league']['id'] }}"
+                                    data-seasons="{{ leagues['seasons']|json_encode() }}"
+                                    {% if app.request.get('league') == leagues['league']['id'] %}selected{% endif %}>{{ leagues['league']['name'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col">
+                    <select name="season" id="season" class="form-select">
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                        <option value="2019">2019</option>
+                        <option value="2018">2018</option>
+                        <option value="2017">2017</option>
+                        <option value="2016">2016</option>
+                        <option value="2015">2015</option>
+                        <option value="2014">2014</option>
+                        <option value="2013">2013</option>
+                        <option value="2012">2012</option>
+                        <option value="2011">2011</option>
+                        <option value="2010">2010</option>
+                    </select>
+                </div>
+                <div class="col">
+                    {% if filter['rounds'] is defined %}
+                        <select name="round" id="round" class="form-select">
+                            {% for round in filter['rounds'] %}
+                                <option value="{{ round }}" {% if app.request.get('round') == round %}selected{% endif %}>{{ round }}</option>
+                            {% endfor %}
+                        </select>
+                    {% endif %}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Valider</button>
+        </form>
+
+        <div class="my-4">
+            {% for result in results %}
+                <div class="results-table">
+                    <div class="match-date">
+                        {{ result['fixture']['date']|date('Y-m-d H:i:s') }}
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <td class="home-name-cell" align="right">
+                                    {{ result['teams']['home']['name'] }}
+                                </td>
+                                <td class="home-results-cell" align="center">
+                                    {{ result['goals']['home'] ~ ' - ' ~  result['goals']['away'] }}
+                                </td>
+                                <td class="home-name-cell" align="left">
+                                    {{ result['teams']['away']['name'] }}
+                                </td>
+                                <td class="button-cell">
+                                    <a href="{{ path('app_details', {id: result['fixture']['id']}) }}">voir détails</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

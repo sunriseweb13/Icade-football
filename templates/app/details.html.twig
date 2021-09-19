@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AppController!{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="text-center p-4 p-md-5 mb-4 text-white rounded bg-dark">
+			<div>{{ result['fixture']['date']|date('Y-m-d H:i:s') }}</div>
+			<h1>
+				{{ result['teams']['home']['name'] ~ ' ** ' ~ result['goals']['home'] ~ ' - ' ~  result['goals']['away'] ~ ' ** ' ~  result['teams']['away']['name'] }}
+			</h1>
+        </div>
+
+        {% set statistics = result['statistics'] %}
+		{% if statistics|length == 2 %}
+        <div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <td align="center">{{ statistics[0]['team']['name'] }}</td>
+                    <td align="center">Team</td>
+                    <td align="center">{{ statistics[1]['team']['name'] }}</td>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in 0..statistics[0]['statistics']|length - 1 %}
+                    <tr>
+                        <td align="center">{{ statistics[0]['statistics'][i]['value']|default(0) }}</td>
+                        <td align="center">{{ statistics[0]['statistics'][i]['type'] }}</td>
+                        <td align="center">{{ statistics[1]['statistics'][i]['value']|default(0) }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+		{% else %}
+			<div class="text-center">Statistics not available</div>
+		{% endif %}
+    </div>
+{% endblock %}
