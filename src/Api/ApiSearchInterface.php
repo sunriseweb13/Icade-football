@@ -6,5 +6,5 @@ namespace App\Api;
 
 interface ApiSearchInterface
 {
-	public function search(string $path, array $parameters = []): array;
+    public function search(string $path, array $parameters = []): array;
 }

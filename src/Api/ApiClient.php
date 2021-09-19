@@ -33,7 +33,7 @@ class ApiClient
             'json' => $data,
             'headers' => [
                 'x-rapidapi-host' => $this->host,
-				'x-rapidapi-key' => $this->apiKey,
+                'x-rapidapi-key' => $this->apiKey,
             ],
         ]);
         if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
